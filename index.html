@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FR1 Security - Guard Schedule Submission</title>
+    <style>
+        :root {
+            --primary: #0A192F;
+            --accent: #00E676;
+            --bg: #F4F6F9;
+            --card-bg: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .header {
+            background-color: var(--primary);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+
+        form {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            background-color: #F8FAFC;
+        }
+
+        .schedule-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .day-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            background: #F8FAFC;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .day-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .total-box {
+            background-color: #E2E8F0;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--accent);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #00C853;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>FR1 SECURITY</h1>
+        <p>Guard Shift & Hours Submission Portal</p>
+    </div>
+
+    <form action="https://api.web3forms.com/submit" method="POST">
+        <!-- WEB3FORMS ACCESS KEY -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        <input type="hidden" name="subject" value="New Guard Hours Submission - FR1 Security">
+
+        <div class="form-group">
+            <label for="guard_name">Guard Full Name</label>
+            <input type="text" id="guard_name" name="guard_name" placeholder="First and Last Name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="site_location">Assigned Site / Location</label>
+            <select id="site_location" name="site_location" required>
+                <option value="" disabled selected>Select Site</option>
+                <option value="Tracy Warehouse">Tracy Site</option>
+                <option value="Oakland Port">Oakland Site</option>
+                <option value="San Jose Commercial">San Jose Site</option>
+                <option value="Cupertino Site">Cupertino Site</option>
+                <option value="Other">Other / Mobile Unit</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="week_ending">Week Ending Date</label>
+            <input type="date" id="week_ending" name="week_ending" required>
+        </div>
+
+        <label>Shift Hours Entry</label>
+        <div class="schedule-grid">
+            <div class="day-row">
+                <span class="day-label">Monday</span>
+                <input type="time" name="mon_start" class="start-time">
+                <input type="time" name="mon_end" class="end-time">
+            </div>
+            <div class="day-row">
+                <span class="day-label">Tuesday</span>
+                <input type="time" name="tue_start" class="start-time">
+                <input type="time" name="tue_end" class="end-time">
+            </div>
+            <div class="day-row">
+                <span class="day-label">Wednesday</span>
+                <input type="time" name="wed_start" class="start-time">
+                <input type="time" name="wed_end" class="end-time">
+            </div>
+            <div class="day-row">
+                <span class="day-label">Thursday</span>
+                <input type="time" name="thu_start" class="start-time">
+                <input type="time" name="thu_end" class="end-time">
+            </div>
+            <div class="day-row">
+                <span class="day-label">Friday</span>
+                <input type="time" name="fri_start" class="start-time">
+                <input type="time" name="fri_end" class="end-time">
+            </div>
+            <div class="day-row">
+                <span class="day-label">Saturday</span>
+                <input type="time" name="sat_start" class="start-time">
+                <input type="time" name="sat_end" class="end-time">
+            </div>
+            <div class="day-row">
+                <span class="day-label">Sunday</span>
+                <input type="time" name="sun_start" class="start-time">
+                <input type="time" name="sun_end" class="end-time">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+            <label for="digital_sig">Digital Signature / Initial Verification</label>
+            <input type="text" id="digital_sig" name="digital_sig" placeholder="Type full name as signature" required>
+        </div>
+
+        <button type="submit" class="btn-submit">SUBMIT TIMECARD FOR PAYROLL</button>
+    </form>
+</div>
+
+</body>
+</html>
