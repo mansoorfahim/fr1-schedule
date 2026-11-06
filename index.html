@@ -80,9 +80,10 @@
     }
     .shift-row {
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-template-columns: 1.5fr 1fr 1fr auto;
       gap: 10px;
       margin-bottom: 10px;
+      align-items: center;
     }
     .add-shift-btn {
       background: transparent;
@@ -97,11 +98,17 @@
     .add-shift-btn:hover {
       background: rgba(13, 110, 253, 0.05);
     }
-    .second-shift {
-      display: none;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--border);
+    .remove-shift-btn {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+      padding: 8px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .remove-shift-btn:hover {
+      background: #ffcdd2;
     }
     .break-option {
       display: flex;
@@ -185,13 +192,24 @@
 
     <div class="break-option">
       <input type="checkbox" id="deduct_breaks" name="deduct_breaks" value="yes">
-      <label for="deduct_breaks" style="margin:0; font-weight: normal; cursor: pointer;">Automatically subtract 30-min unpaid meal break per shift worked</label>
+      <label for="deduct_breaks" style="margin:0; font-weight: normal; cursor: pointer;">Automatically subtract 30-min unpaid meal break per shift worked (for shifts 5h+)</label>
     </div>
 
     <h3 style="margin-top: 25px; color: #0b1e36;">Daily Shift Log</h3>
 
-    <!-- Dynamic Days (Mon - Sun) -->
+    <!-- Dynamic Days Container -->
     <div id="days-container"></div>
+
+    <!-- Shared Datalist for Site Suggestions across any city/warehouse -->
+    <datalist id="site-suggestions">
+      <option value="Oakland Port Warehouse">
+      <option value="San Jose Commercial Distribution Center">
+      <option value="Cupertino Tech Facility">
+      <option value="Tracy Airport Logistics Hub">
+      <option value="San Francisco Terminal Cargo">
+      <option value="Stockton Industrial Park">
+      <option value="Fremont Manufacturing Plant">
+    </datalist>
 
     <!-- Map Integration -->
     <div class="form-group" style="margin-top: 30px;">
@@ -230,47 +248,22 @@
     { name: 'Sunday', key: 'sun' }
   ];
 
-  const sites = [
-    'Oakland Port',
-    'San Jose Commercial Site',
-    'Cupertino Site',
-    'Tracy Airport',
-    'San Francisco Terminal',
-    'Other Site'
-  ];
-
   const container = document.getElementById('days-container');
 
   days.forEach(day => {
-    let siteOptions = sites.map(s => `<option value="${s}">${s}</option>`).join('');
-
     const dayHtml = `
-      <div class="day-card">
+      <div class="day-card" id="day_card_${day.key}">
         <div class="day-header">
           <span>${day.name}</span>
-          <button type="button" class="add-shift-btn" onclick="toggleSecondShift('${day.key}')">+ Add 2nd Shift</button>
+          <button type="type" class="add-shift-btn" onclick="addShift('${day.key}')">+ Add Another Shift</button>
         </div>
-
-        <!-- Shift 1 -->
-        <div class="shift-row">
-          <select name="${day.key}_site_1">
-            <option value="">Select Site...</option>
-            ${siteOptions}
-          </select>
-          <input type="time" id="${day.key}_start_1" name="${day.key}_start_1" class="time-input">
-          <input type="time" id="${day.key}_end_1" name="${day.key}_end_1" class="time-input">
-        </div>
-
-        <!-- Shift 2 (Hidden by default) -->
-        <div id="${day.key}_shift_2_container" class="second-shift">
-          <small style="font-weight: bold; color: #555;">Second Shift (${day.name}):</small>
-          <div class="shift-row" style="margin-top: 5px;">
-            <select name="${day.key}_site_2">
-              <option value="">Select Site 2...</option>
-              ${siteOptions}
-            </select>
-            <input type="time" id="${day.key}_start_2" name="${day.key}_start_2" class="time-input">
-            <input type="time" id="${day.key}_end_2" name="${day.key}_end_2" class="time-input">
+        <div id="${day.key}_shifts_wrapper">
+          <!-- Initial Shift Row -->
+          <div class="shift-row" data-shift-index="1">
+            <input type="text" name="${day.key}_site_1" list="site-suggestions" placeholder="Type or search site/warehouse..." required>
+            <input type="time" name="${day.key}_start_1" class="time-input" required>
+            <input type="time" name="${day.key}_end_1" class="time-input" required>
+            <div></div>
           </div>
         </div>
       </div>
@@ -278,13 +271,25 @@
     container.innerHTML += dayHtml;
   });
 
-  function toggleSecondShift(dayKey) {
-    const shift2 = document.getElementById(`${dayKey}_shift_2_container`);
-    if (shift2.style.display === 'block') {
-      shift2.style.display = 'none';
-    } else {
-      shift2.style.display = 'block';
-    }
+  function addShift(dayKey) {
+    const wrapper = document.getElementById(`${dayKey}_shifts_wrapper`);
+    const currentCount = wrapper.getElementsByClassName('shift-row').length + 1;
+
+    const newRow = document.createElement('div');
+    newRow.className = 'shift-row';
+    newRow.setAttribute('data-shift-index', currentCount);
+    newRow.innerHTML = `
+      <input type="text" name="${dayKey}_site_${currentCount}" list="site-suggestions" placeholder="Type or search site/warehouse...">
+      <input type="time" name="${dayKey}_start_${currentCount}" class="time-input">
+      <input type="time" name="${dayKey}_end_${currentCount}" class="time-input">
+      <button type="button" class="remove-shift-btn" onclick="removeShift(this)">X</button>
+    `;
+    wrapper.appendChild(newRow);
+  }
+
+  function removeShift(button) {
+    button.parentElement.remove();
+    calculateHours();
   }
 
   function calculateHours() {
@@ -292,9 +297,13 @@
     const deductBreaks = document.getElementById('deduct_breaks').checked;
 
     days.forEach(day => {
-      [1, 2].forEach(shiftNum => {
-        const startVal = document.getElementById(`${day.key}_start_${shiftNum}`)?.value;
-        const endVal = document.getElementById(`${day.key}_end_${shiftNum}`)?.value;
+      const wrapper = document.getElementById(`${day.key}_shifts_wrapper`);
+      const rows = wrapper.getElementsByClassName('shift-row');
+
+      Array.from(rows).forEach((row, index) => {
+        const shiftNum = index + 1;
+        const startVal = row.querySelector(`input[name*="start"]`)?.value;
+        const endVal = row.querySelector(`input[name*="end"]`)?.value;
 
         if (startVal && endVal) {
           const [sH, sM] = startVal.split(':').map(Number);
@@ -304,7 +313,7 @@
           let endMins = eH * 60 + eM;
 
           if (endMins < startMins) {
-            endMins += 24 * 60;
+            endMins += 24 * 60; // Handle overnight shifts
           }
 
           let shiftDuration = endMins - startMins;
