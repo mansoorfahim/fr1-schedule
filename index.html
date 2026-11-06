@@ -55,7 +55,7 @@
       margin-bottom: 6px;
       color: var(--primary);
     }
-    input[type="text"], input[type="date"], input[type="time"], select {
+    input[type="text"], input[type="date"], input[type="time"] {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--border);
@@ -200,17 +200,6 @@
     <!-- Dynamic Days Container -->
     <div id="days-container"></div>
 
-    <!-- Datalist for Searchable Sites / Warehouses in any city -->
-    <datalist id="site-suggestions">
-      <option value="Oakland Port Warehouse">
-      <option value="San Jose Commercial Distribution Center">
-      <option value="Cupertino Tech Facility">
-      <option value="Tracy Airport Logistics Hub">
-      <option value="San Francisco Terminal Cargo">
-      <option value="Stockton Industrial Park">
-      <option value="Fremont Manufacturing Plant">
-    </datalist>
-
     <!-- Map Integration -->
     <div class="form-group" style="margin-top: 30px;">
       <label>FR1 Security Regional Operations Map</label>
@@ -260,7 +249,7 @@
         <div id="${day.key}_shifts_wrapper">
           <!-- Initial Shift Row -->
           <div class="shift-row" data-shift-index="1">
-            <input type="text" name="${day.key}_site_1" list="site-suggestions" placeholder="Type warehouse, city, or site..." required>
+            <input type="text" name="${day.key}_site_1" placeholder="Enter custom address or location..." required>
             <input type="time" name="${day.key}_start_1" class="time-input" required>
             <input type="time" name="${day.key}_end_1" class="time-input" required>
             <div></div>
@@ -279,7 +268,7 @@
     newRow.className = 'shift-row';
     newRow.setAttribute('data-shift-index', currentCount);
     newRow.innerHTML = `
-      <input type="text" name="${dayKey}_site_${currentCount}" list="site-suggestions" placeholder="Type warehouse, city, or site...">
+      <input type="text" name="${dayKey}_site_${currentCount}" placeholder="Enter custom address or location...">
       <input type="time" name="${dayKey}_start_${currentCount}" class="time-input">
       <input type="time" name="${dayKey}_end_${currentCount}" class="time-input">
       <button type="button" class="remove-shift-btn" onclick="removeShift(this)">X</button>
