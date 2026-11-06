@@ -200,7 +200,7 @@
     <!-- Dynamic Days Container -->
     <div id="days-container"></div>
 
-    <!-- Shared Datalist for Site Suggestions across any city/warehouse -->
+    <!-- Datalist for Searchable Sites / Warehouses in any city -->
     <datalist id="site-suggestions">
       <option value="Oakland Port Warehouse">
       <option value="San Jose Commercial Distribution Center">
@@ -255,12 +255,12 @@
       <div class="day-card" id="day_card_${day.key}">
         <div class="day-header">
           <span>${day.name}</span>
-          <button type="type" class="add-shift-btn" onclick="addShift('${day.key}')">+ Add Another Shift</button>
+          <button type="button" class="add-shift-btn" onclick="addShift('${day.key}')">+ Add Another Shift</button>
         </div>
         <div id="${day.key}_shifts_wrapper">
           <!-- Initial Shift Row -->
           <div class="shift-row" data-shift-index="1">
-            <input type="text" name="${day.key}_site_1" list="site-suggestions" placeholder="Type or search site/warehouse..." required>
+            <input type="text" name="${day.key}_site_1" list="site-suggestions" placeholder="Type warehouse, city, or site..." required>
             <input type="time" name="${day.key}_start_1" class="time-input" required>
             <input type="time" name="${day.key}_end_1" class="time-input" required>
             <div></div>
@@ -279,7 +279,7 @@
     newRow.className = 'shift-row';
     newRow.setAttribute('data-shift-index', currentCount);
     newRow.innerHTML = `
-      <input type="text" name="${dayKey}_site_${currentCount}" list="site-suggestions" placeholder="Type or search site/warehouse...">
+      <input type="text" name="${dayKey}_site_${currentCount}" list="site-suggestions" placeholder="Type warehouse, city, or site...">
       <input type="time" name="${dayKey}_start_${currentCount}" class="time-input">
       <input type="time" name="${dayKey}_end_${currentCount}" class="time-input">
       <button type="button" class="remove-shift-btn" onclick="removeShift(this)">X</button>
@@ -300,8 +300,7 @@
       const wrapper = document.getElementById(`${day.key}_shifts_wrapper`);
       const rows = wrapper.getElementsByClassName('shift-row');
 
-      Array.from(rows).forEach((row, index) => {
-        const shiftNum = index + 1;
+      Array.from(rows).forEach((row) => {
         const startVal = row.querySelector(`input[name*="start"]`)?.value;
         const endVal = row.querySelector(`input[name*="end"]`)?.value;
 
@@ -313,13 +312,13 @@
           let endMins = eH * 60 + eM;
 
           if (endMins < startMins) {
-            endMins += 24 * 60; // Handle overnight shifts
+            endMins += 24 * 60; // Overnight shifts
           }
 
           let shiftDuration = endMins - startMins;
 
-          if (deductBreaks && shiftDuration >= 300) { // Deduct 30m if shift is 5 hours or more
-            shiftDuration -= 30;
+          if (deductBreaks && shiftDuration >= 300) {
+            shiftDuration -= 30; // 30-min unpaid break deduction
           }
 
           totalMinutes += shiftDuration;
