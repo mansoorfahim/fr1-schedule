@@ -1,217 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FR1 Security - Guard Schedule Submission</title>
-    <style>
-        :root {
-            --primary: #0A192F;
-            --accent: #00E676;
-            --bg: #F4F6F9;
-            --card-bg: #FFFFFF;
-            --text-main: #1E293B;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .header {
-            background-color: var(--primary);
-            color: white;
-            padding: 24px;
-            text-align: center;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            margin: 5px 0 0 0;
-            color: #94A3B8;
-            font-size: 0.9rem;
-        }
-
-        form {
-            padding: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        input[type="text"], input[type="date"], select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            background-color: #F8FAFC;
-        }
-
-        .schedule-grid {
-            display: grid;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .day-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            align-items: center;
-            background: #F8FAFC;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-        }
-
-        .day-label {
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .total-box {
-            background-color: #E2E8F0;
-            padding: 16px;
-            border-radius: 6px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-top: 20px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: var(--accent);
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.2s;
-        }
-
-        .btn-submit:hover {
-            background-color: #00C853;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FR1 Security - Guard Shift & Hours Submission Portal</title>
+  <style>
+    :root {
+      --primary: #0b1e36;
+      --secondary: #0d6efd;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --border: #dce1e7;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .header {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 25px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+    .header p {
+      margin: 5px 0 0 0;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+    form {
+      padding: 25px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+    input[type="text"], input[type="date"], input[type="time"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 0.95rem;
+    }
+    .day-card {
+      background: #fafbfc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .day-header {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .shift-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .add-shift-btn {
+      background: transparent;
+      border: 1px dashed var(--secondary);
+      color: var(--secondary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .add-shift-btn:hover {
+      background: rgba(13, 110, 253, 0.05);
+    }
+    .second-shift {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+    .break-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #555;
+      background: #eef4ff;
+      padding: 10px 14px;
+      border-radius: 6px;
+    }
+    .map-container {
+      margin-top: 25px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .total-box {
+      background-color: #eef4ff;
+      border: 1px solid #b6d4fe;
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .total-box span {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .total-box input {
+      width: 140px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--secondary);
+      text-align: right;
+      border: none;
+      background: transparent;
+    }
+    button[type="submit"] {
+      width: 100%;
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.2s;
+    }
+    button[type="submit"]:hover {
+      background-color: #0b5ed7;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>FR1 SECURITY</h1>
-        <p>Guard Shift & Hours Submission Portal</p>
+  <div class="header">
+    <h1>FR1 SECURITY</h1>
+    <p>Guard Shift & Hours Submission Portal</p>
+  </div>
+
+  <form action="https://formspree.io/f/xrpprkdy" method="POST">
+    <input type="hidden" name="subject" value="New Guard Hours Submission - FR1 Security">
+
+    <div class="form-group">
+      <label for="guard_name">Guard Full Name</label>
+      <input type="text" id="guard_name" name="guard_name" placeholder="First and Last Name" required>
     </div>
 
-        <form action="https://formspree.io/f/xrpprkdy" method="POST">
-       
-        <input type="hidden" name="subject" value="New Guard Hours Submission - FR1 Security">
-       
+    <div class="form-group">
+      <label for="week_ending">Week Ending Date</label>
+      <input type="date" id="week_ending" name="week_ending" required>
+    </div>
 
-        <div class="form-group">
-            <label for="guard_name">Guard Full Name</label>
-            <input type="text" id="guard_name" name="guard_name" placeholder="First and Last Name" required>
-        </div>
+    <div class="break-option">
+      <input type="checkbox" id="deduct_breaks" name="deduct_breaks" value="yes">
+      <label for="deduct_breaks" style="margin:0; font-weight: normal; cursor: pointer;">Automatically subtract 30-min unpaid meal break per shift worked</label>
+    </div>
 
-        <div class="form-group">
-            <label for="site_location">Assigned Site / Location</label>
-            <select id="site_location" name="site_location" required>
-                <option value="" disabled selected>Select Site</option>
-                <option value="Tracy Warehouse">Tracy Site</option>
-                <option value="Oakland Port">Oakland Site</option>
-                <option value="San Jose Commercial">San Jose Site</option>
-                <option value="Cupertino Site">Cupertino Site</option>
-                <option value="Other">Other / Mobile Unit</option>
-            </select>
-        </div>
+    <h3 style="margin-top: 25px; color: #0b1e36;">Daily Shift Log</h3>
 
-        <div class="form-group">
-            <label for="week_ending">Week Ending Date</label>
-            <input type="date" id="week_ending" name="week_ending" required>
-        </div>
+    <!-- Dynamic Days (Mon - Sun) -->
+    <div id="days-container"></div>
 
-        <label>Shift Hours Entry</label>
-        <div class="schedule-grid">
-            <div class="day-row">
-                <span class="day-label">Monday</span>
-                <input type="time" name="mon_start" class="start-time">
-                <input type="time" name="mon_end" class="end-time">
-            </div>
-            <div class="day-row">
-                <span class="day-label">Tuesday</span>
-                <input type="time" name="tue_start" class="start-time">
-                <input type="time" name="tue_end" class="end-time">
-            </div>
-            <div class="day-row">
-                <span class="day-label">Wednesday</span>
-                <input type="time" name="wed_start" class="start-time">
-                <input type="time" name="wed_end" class="end-time">
-            </div>
-            <div class="day-row">
-                <span class="day-label">Thursday</span>
-                <input type="time" name="thu_start" class="start-time">
-                <input type="time" name="thu_end" class="end-time">
-            </div>
-            <div class="day-row">
-                <span class="day-label">Friday</span>
-                <input type="time" name="fri_start" class="start-time">
-                <input type="time" name="fri_end" class="end-time">
-            </div>
-            <div class="day-row">
-                <span class="day-label">Saturday</span>
-                <input type="time" name="sat_start" class="start-time">
-                <input type="time" name="sat_end" class="end-time">
-            </div>
-            <div class="day-row">
-                <span class="day-label">Sunday</span>
-                <input type="time" name="sun_start" class="start-time">
-                <input type="time" name="sun_end" class="end-time">
-            </div>
-        </div>
+    <!-- Map Integration -->
+    <div class="form-group" style="margin-top: 30px;">
+      <label>FR1 Security Regional Operations Map</label>
+      <div class="map-container">
+        <iframe 
+          width="100%" 
+          height="280" 
+          frameborder="0" 
+          scrolling="no" 
+          marginheight="0" 
+          marginwidth="0" 
+          src="https://maps.google.com/maps?q=California&t=&z=8&ie=UTF8&iwloc=&output=embed">
+        </iframe>
+      </div>
+    </div>
 
-        <div class="form-group" style="margin-top: 20px;">
-            <label for="digital_sig">Digital Signature / Initial Verification</label>
-            <input type="text" id="digital_sig" name="digital_sig" placeholder="Type full name as signature" required>
-        </div>
+    <!-- Live Total Weekly Hours Display -->
+    <div class="total-box">
+      <span>Total Weekly Hours:</span>
+      <input type="text" id="total_hours" name="total_hours" readonly value="0.00 hrs">
+    </div>
 
-        <button type="submit" class="btn-submit">SUBMIT TIMECARD FOR PAYROLL</button>
-    </form>
+    <button type="submit">Submit Weekly Timesheet</button>
+  </form>
 </div>
+
+<script>
+  const days = [
+    { name: 'Monday', key: 'mon' },
+    { name: 'Tuesday', key: 'tue' },
+    { name: 'Wednesday', key: 'wed' },
+    { name: 'Thursday', key: 'thu' },
+    { name: 'Friday', key: 'fri' },
+    { name: 'Saturday', key: 'sat' },
+    { name: 'Sunday', key: 'sun' }
+  ];
+
+  const sites = [
+    'Oakland Port',
+    'San Jose Commercial Site',
+    'Cupertino Site',
+    'Tracy Airport',
+    'San Francisco Terminal',
+    'Other Site'
+  ];
+
+  const container = document.getElementById('days-container');
+
+  days.forEach(day => {
+    let siteOptions = sites.map(s => `<option value="${s}">${s}</option>`).join('');
+
+    const dayHtml = `
+      <div class="day-card">
+        <div class="day-header">
+          <span>${day.name}</span>
+          <button type="button" class="add-shift-btn" onclick="toggleSecondShift('${day.key}')">+ Add 2nd Shift</button>
+        </div>
+
+        <!-- Shift 1 -->
+        <div class="shift-row">
+          <select name="${day.key}_site_1">
+            <option value="">Select Site...</option>
+            ${siteOptions}
+          </select>
+          <input type="time" id="${day.key}_start_1" name="${day.key}_start_1" class="time-input">
+          <input type="time" id="${day.key}_end_1" name="${day.key}_end_1" class="time-input">
+        </div>
+
+        <!-- Shift 2 (Hidden by default) -->
+        <div id="${day.key}_shift_2_container" class="second-shift">
+          <small style="font-weight: bold; color: #555;">Second Shift (${day.name}):</small>
+          <div class="shift-row" style="margin-top: 5px;">
+            <select name="${day.key}_site_2">
+              <option value="">Select Site 2...</option>
+              ${siteOptions}
+            </select>
+            <input type="time" id="${day.key}_start_2" name="${day.key}_start_2" class="time-input">
+            <input type="time" id="${day.key}_end_2" name="${day.key}_end_2" class="time-input">
+          </div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += dayHtml;
+  });
+
+  function toggleSecondShift(dayKey) {
+    const shift2 = document.getElementById(`${dayKey}_shift_2_container`);
+    if (shift2.style.display === 'block') {
+      shift2.style.display = 'none';
+    } else {
+      shift2.style.display = 'block';
+    }
+  }
+
+  function calculateHours() {
+    let totalMinutes = 0;
+    const deductBreaks = document.getElementById('deduct_breaks').checked;
+
+    days.forEach(day => {
+      [1, 2].forEach(shiftNum => {
+        const startVal = document.getElementById(`${day.key}_start_${shiftNum}`)?.value;
+        const endVal = document.getElementById(`${day.key}_end_${shiftNum}`)?.value;
+
+        if (startVal && endVal) {
+          const [sH, sM] = startVal.split(':').map(Number);
+          const [eH, eM] = endVal.split(':').map(Number);
+
+          let startMins = sH * 60 + sM;
+          let endMins = eH * 60 + eM;
+
+          if (endMins < startMins) {
+            endMins += 24 * 60;
+          }
+
+          let shiftDuration = endMins - startMins;
+
+          if (deductBreaks && shiftDuration >= 300) { // Deduct 30m if shift is 5 hours or more
+            shiftDuration -= 30;
+          }
+
+          totalMinutes += shiftDuration;
+        }
+      });
+    });
+
+    const hours = (totalMinutes / 60).toFixed(2);
+    document.getElementById('total_hours').value = `${hours} hrs`;
+  }
+
+  document.addEventListener('input', (e) => {
+    if (e.target.classList.contains('time-input') || e.target.id === 'deduct_breaks') {
+      calculateHours();
+    }
+  });
+</script>
 
 </body>
 </html>
