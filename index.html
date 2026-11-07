@@ -121,12 +121,6 @@
       padding: 10px 14px;
       border-radius: 6px;
     }
-    .map-container {
-      margin-top: 25px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
     .total-box {
       background-color: #eef4ff;
       border: 1px solid #b6d4fe;
@@ -200,22 +194,6 @@
     <!-- Dynamic Days Container -->
     <div id="days-container"></div>
 
-    <!-- Map Integration -->
-    <div class="form-group" style="margin-top: 30px;">
-      <label>FR1 Security Regional Operations Map</label>
-      <div class="map-container">
-        <iframe 
-          width="100%" 
-          height="280" 
-          frameborder="0" 
-          scrolling="no" 
-          marginheight="0" 
-          marginwidth="0" 
-          src="https://maps.google.com/maps?q=California&t=&z=8&ie=UTF8&iwloc=&output=embed">
-        </iframe>
-      </div>
-    </div>
-
     <!-- Live Total Weekly Hours Display -->
     <div class="total-box">
       <span>Total Weekly Hours:</span>
@@ -249,9 +227,9 @@
         <div id="${day.key}_shifts_wrapper">
           <!-- Initial Shift Row -->
           <div class="shift-row" data-shift-index="1">
-            <input type="text" name="${day.key}_site_1" placeholder="Enter custom address or location..." required>
-            <input type="time" name="${day.key}_start_1" class="time-input" required>
-            <input type="time" name="${day.key}_end_1" class="time-input" required>
+            <input type="text" name="${day.key}_site_1" placeholder="Enter custom address or location...">
+            <input type="time" name="${day.key}_start_1" class="time-input">
+            <input type="time" name="${day.key}_end_1" class="time-input">
             <div></div>
           </div>
         </div>
@@ -268,63 +246,5 @@
     newRow.className = 'shift-row';
     newRow.setAttribute('data-shift-index', currentCount);
     newRow.innerHTML = `
-      <input type="text" name="${dayKey}_site_${currentCount}" placeholder="Enter custom address or location...">
-      <input type="time" name="${dayKey}_start_${currentCount}" class="time-input">
-      <input type="time" name="${dayKey}_end_${currentCount}" class="time-input">
-      <button type="button" class="remove-shift-btn" onclick="removeShift(this)">X</button>
-    `;
-    wrapper.appendChild(newRow);
-  }
-
-  function removeShift(button) {
-    button.parentElement.remove();
-    calculateHours();
-  }
-
-  function calculateHours() {
-    let totalMinutes = 0;
-    const deductBreaks = document.getElementById('deduct_breaks').checked;
-
-    days.forEach(day => {
-      const wrapper = document.getElementById(`${day.key}_shifts_wrapper`);
-      const rows = wrapper.getElementsByClassName('shift-row');
-
-      Array.from(rows).forEach((row) => {
-        const startVal = row.querySelector(`input[name*="start"]`)?.value;
-        const endVal = row.querySelector(`input[name*="end"]`)?.value;
-
-        if (startVal && endVal) {
-          const [sH, sM] = startVal.split(':').map(Number);
-          const [eH, eM] = endVal.split(':').map(Number);
-
-          let startMins = sH * 60 + sM;
-          let endMins = eH * 60 + eM;
-
-          if (endMins < startMins) {
-            endMins += 24 * 60; // Overnight shifts
-          }
-
-          let shiftDuration = endMins - startMins;
-
-          if (deductBreaks && shiftDuration >= 300) {
-            shiftDuration -= 30; // 30-min unpaid break deduction
-          }
-
-          totalMinutes += shiftDuration;
-        }
-      });
-    });
-
-    const hours = (totalMinutes / 60).toFixed(2);
-    document.getElementById('total_hours').value = `${hours} hrs`;
-  }
-
-  document.addEventListener('input', (e) => {
-    if (e.target.classList.contains('time-input') || e.target.id === 'deduct_breaks') {
-      calculateHours();
-    }
-  });
-</script>
-
-</body>
-</html>
+      <input type="text" name="${dayKey}_site_${currentCount}" placeholder="Enter custom address or
+      
