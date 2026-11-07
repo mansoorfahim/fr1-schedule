@@ -233,19 +233,60 @@
     const currentCount = wrapper.getElementsByClassName('shift-row').length + 1;
 
     const newRow = document.createElement('div');
+    newRow.className = 'shift-row';
+    newRow.setAttribute('data-shift-index', currentCount);
+    newRow.innerHTML = `
+      <input type="text" name="${dayKey}_site_${currentCount}" placeholder="Enter custom address or location...">
+      <input type="time" name="${dayKey}_start_${currentCount}" class="time-input">
+      <input type="time" name="${dayKey}_end_${currentCount}" class="time-input">
+      <button type="button" class="remove-shift-btn" onclick="removeShift(this)">X</button>
+    `;
+    wrapper.appendChild(newRow);
+  }
 
+  function removeShift(button) {
+    button.parentElement.remove();
+    calculateHours();
+  }
 
+  function calculateHours() {
+    let totalMinutes = 0;
 
+    days.forEach(day => {
+      const wrapper = document.getElementById(`${day.key}_shifts_wrapper`);
+      const rows = wrapper.getElementsByClassName('shift-row');
 
+      Array.from(rows).forEach((row) => {
+        const startVal = row.querySelector(`input[name*="start"]`)?.value;
+        const endVal = row.querySelector(`input[name*="end"]`)?.value;
 
+        if (startVal && endVal) {
+          const [sH, sM] = startVal.split(':').map(Number);
+          const [eH, eM] = endVal.split(':').map(Number);
 
+          let startMins = sH * 60 + sM;
+          let endMins = eH * 60 + eM;
 
+          if (endMins < startMins) {
+            endMins += 24 * 60; // Overnight shifts
+          }
 
+          let shiftDuration = endMins - startMins;
+          totalMinutes += shiftDuration;
+        }
+      });
+    });
 
+    const hours = (totalMinutes / 60).toFixed(2);
+    document.getElementById('total_hours').value = `${hours} hrs`;
+  }
 
+  document.addEventListener('input', (e) => {
+    if (e.target.classList.contains('time-input')) {
+      calculateHours();
+    }
+  });
+</script>
 
-
-
-
-
-  
+</body>
+</html>
