@@ -110,17 +110,6 @@
     .remove-shift-btn:hover {
       background: #ffcdd2;
     }
-    .break-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 15px;
-      font-size: 0.9rem;
-      color: #555;
-      background: #eef4ff;
-      padding: 10px 14px;
-      border-radius: 6px;
-    }
     .total-box {
       background-color: #eef4ff;
       border: 1px solid #b6d4fe;
@@ -184,11 +173,6 @@
       <input type="date" id="week_ending" name="week_ending" required>
     </div>
 
-    <div class="break-option">
-      <input type="checkbox" id="deduct_breaks" name="deduct_breaks" value="yes">
-      <label for="deduct_breaks" style="margin:0; font-weight: normal; cursor: pointer;">Automatically subtract 30-min unpaid meal break per shift worked (for shifts 5h+)</label>
-    </div>
-
     <h3 style="margin-top: 25px; color: #0b1e36;">Daily Shift Log</h3>
 
     <!-- Dynamic Days Container -->
@@ -198,6 +182,12 @@
     <div class="total-box">
       <span>Total Weekly Hours:</span>
       <input type="text" id="total_hours" name="total_hours" readonly value="0.00 hrs">
+    </div>
+
+    <!-- Electronic Signature Field -->
+    <div class="form-group" style="margin-top: 25px;">
+      <label for="guard_signature">Guard Electronic Signature (Type Full Name)</label>
+      <input type="text" id="guard_signature" name="guard_signature" placeholder="Type your full legal name to sign" required>
     </div>
 
     <button type="submit">Submit Weekly Timesheet</button>
@@ -243,8 +233,19 @@
     const currentCount = wrapper.getElementsByClassName('shift-row').length + 1;
 
     const newRow = document.createElement('div');
-    newRow.className = 'shift-row';
-    newRow.setAttribute('data-shift-index', currentCount);
-    newRow.innerHTML = `
-      <input type="text" name="${dayKey}_site_${currentCount}" placeholder="Enter custom address or
-      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
